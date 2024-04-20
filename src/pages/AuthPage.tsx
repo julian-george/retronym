@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useUser } from "../context/userContext";
+import PageWrapper from "../components/PageWrapper";
 
 const LoginForm: React.FC = () => {
   const { login } = useUser();
@@ -23,7 +24,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       <div>
         <label htmlFor="username">Username:</label>
         <input
@@ -80,36 +81,30 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="flex-col">
+      <label htmlFor="username">Username</label>
+      <input
+        id="username"
+        value={username}
+        onChange={handleUsernameChange}
+        required
+      />
+      <label htmlFor="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        value={password}
+        onChange={handlePasswordChange}
+        required
+      />
+      <label htmlFor="confirmPassword">Confirm Password:</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        value={confirmPassword}
+        onChange={handleConfirmPasswordChange}
+        required
+      />
       <button
         type="submit"
         disabled={isLoading || confirmPassword !== password}
@@ -133,12 +128,14 @@ function AuthPage() {
     );
   }, [setAuthState]);
   return (
-    <div className="flex justify-center items-center h-screen">
-      {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
-      <div onClick={toggleAuthState}>
-        {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
+    <PageWrapper>
+      <div className="bg-gray-100 font-serif p-8">
+        {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
+        <div onClick={toggleAuthState}>
+          {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 
