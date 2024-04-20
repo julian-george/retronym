@@ -24,8 +24,8 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      <div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 ">
+      <div className="flex flex-col">
         <label htmlFor="username">Username:</label>
         <input
           id="username"
@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
           required
         />
       </div>
-      <div>
+      <div className="flex flex-col">
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
           required
         />
       </div>
-      <button type="submit" disabled={isLoading}>
+      <button className="text-right" type="submit" disabled={isLoading}>
         {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
@@ -81,31 +81,38 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex-col">
-      <label htmlFor="username">Username</label>
-      <input
-        id="username"
-        value={username}
-        onChange={handleUsernameChange}
-        required
-      />
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        id="password"
-        value={password}
-        onChange={handlePasswordChange}
-        required
-      />
-      <label htmlFor="confirmPassword">Confirm Password:</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        required
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 ">
+      <div className="flex flex-col">
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          value={username}
+          onChange={handleUsernameChange}
+          required
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={handlePasswordChange}
+          required
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+          required
+        />
+      </div>
       <button
+        className="text-right"
         type="submit"
         disabled={isLoading || confirmPassword !== password}
       >
@@ -129,10 +136,13 @@ function AuthPage() {
   }, [setAuthState]);
   return (
     <PageWrapper>
-      <div className="bg-gray-100 font-serif p-8">
+      <h1 className="font-serif text-3xl">Retronym</h1>
+      <div className="bg-gray-100 font-serif px-8 py-4 flex flex-col">
         {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
-        <div onClick={toggleAuthState}>
-          {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
+        <div className="text-sm text-right">
+          <button onClick={toggleAuthState}>
+            {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
+          </button>
         </div>
       </div>
     </PageWrapper>
