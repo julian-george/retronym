@@ -5,12 +5,11 @@ import FeedPage from "./pages/FeedPage";
 import AuthPage from "./pages/AuthPage";
 
 function Navigation() {
-  const { user } = useUser();
-  console.log(user);
+  const { user, tokenLoading } = useUser();
   const router = createBrowserRouter([
     {
       path: "/",
-      element: user ? <FeedPage /> : <AuthPage />,
+      element: tokenLoading ? <div /> : user ? <FeedPage /> : <AuthPage />,
     },
   ]);
   return <RouterProvider router={router} />;
