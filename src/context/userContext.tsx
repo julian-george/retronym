@@ -23,6 +23,7 @@ interface UserContextType {
   login: (username: string, password: string) => Promise<boolean>;
   register: (username: string, password: string) => Promise<boolean>;
   loginFromToken: (token: string) => Promise<boolean>;
+  logout: () => boolean;
 }
 
 // Create the context with a default value
@@ -47,6 +48,10 @@ function getCookie() {
   return null;
 }
 
+function deleteCookie() {
+  document.cookie = `${TOKEN_NAME}=; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+}
+
 // Provider component that wraps your app and makes user info available everywhere
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -60,7 +65,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         if (success) {
           setToken(storedToken);
         } else {
-          document.cookie = `${TOKEN_NAME}=; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+          deleteCookie();
         }
         setTokenLoading(false);
       });
@@ -103,7 +108,6 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   );
   const loginFromToken = useCallback(
     async (storedToken: string) => {
-      console.log(storedToken);
       return axios
         .post<{ token: string }, { success: boolean; data: any }>(
           API_URL + "/login-token",
@@ -151,9 +155,24 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     [setUser, setToken]
   );
 
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    deleteCookie();
+    return true;
+  }, [setUser, setToken]);
+
   return (
     <UserContext.Provider
-      value={{ user, token, tokenLoading, login, register, loginFromToken }}
+      value={{
+        user,
+        token,
+        tokenLoading,
+        login,
+        register,
+        loginFromToken,
+        logout,
+      }}
     >
       {children}
     </UserContext.Provider>
