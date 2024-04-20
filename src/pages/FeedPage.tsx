@@ -1,5 +1,9 @@
 import React, { useState, Dispatch, SetStateAction, useCallback } from "react";
 import { useUser } from "../context/userContext";
+import Title from "../components/Title";
+import Feed from "../components/Feed";
+import PageWrapper from "../components/PageWrapper";
+import Modal from "../components/Modal";
 
 const Sidebar: React.FC<{
   isOpen: boolean;
@@ -28,26 +32,40 @@ const Sidebar: React.FC<{
   );
 };
 
+const MAX_SCROLL_TIME = 30;
+
 function FeedPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [attentionModalOpen, setAttentionModalOpen] = useState(true);
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
+
   return (
-    <>
+    <PageWrapper>
+      <Modal
+        isOpen={attentionModalOpen}
+        closeModal={() => setAttentionModalOpen(false)}
+      >
+        <div>You're spending too much time!!</div>
+      </Modal>
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-      <div className="flex items-center w-full">
+      <div className="flex items-center w-full h-fit">
         <div className="flex-1">
           <div className="text-left" onClick={toggleSidebar}>
             Sidebar
           </div>
         </div>
         <div className="flex-1">
-          <h1 className="text-center">Retronym</h1>
+          <Title />
         </div>
         <div className="flex-1"></div>
       </div>
-    </>
+      <div className="h-16"></div>
+      <div className="w-3/5">
+        <Feed />
+      </div>
+    </PageWrapper>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useUser } from "../context/userContext";
 import PageWrapper from "../components/PageWrapper";
+import Title from "../components/Title";
 
 const LoginForm: React.FC = () => {
   const { login } = useUser();
@@ -136,13 +137,17 @@ function AuthPage() {
   }, [setAuthState]);
   return (
     <PageWrapper>
-      <h1 className="font-serif text-3xl">Retronym</h1>
-      <div className="bg-gray-100 font-serif px-8 py-4 flex flex-col">
-        {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
-        <div className="text-sm text-right">
-          <button onClick={toggleAuthState}>
-            {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
-          </button>
+      <div className="h-f flex flex-col items-center ">
+        <Title />
+        <div className="bg-gray-100 font-serif px-8 py-4 flex flex-col">
+          {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
+          <div className="text-sm text-right">
+            <button onClick={toggleAuthState}>
+              {authState == AuthState.LoggingIn
+                ? "Create an account"
+                : "Log in"}
+            </button>
+          </div>
         </div>
       </div>
     </PageWrapper>
