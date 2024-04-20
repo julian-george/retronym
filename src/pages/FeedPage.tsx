@@ -36,7 +36,7 @@ const MAX_SCROLL_TIME = 30;
 
 function FeedPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [attentionModalOpen, setAttentionModalOpen] = useState(true);
+  const [attentionModalOpen, setAttentionModalOpen] = useState(false);
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
