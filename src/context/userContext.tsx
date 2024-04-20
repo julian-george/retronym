@@ -32,7 +32,6 @@ const UserContext = createContext<UserContextType | null>(null);
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  console.log(user);
   const login = useCallback(
     async (username: string, password: string) => {
       return axios
