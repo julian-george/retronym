@@ -96,7 +96,7 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
           key={site}
           site={site}
           parent={parent}
-          disabled={!codes[site]}
+          disabled={codes[site]}
         />
       ))}
 

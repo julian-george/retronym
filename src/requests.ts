@@ -1,6 +1,5 @@
 import axios from "axios";
 import BASE_API_URL from "./url";
-import { Redirect } from "./types";
 
 const API_URL = BASE_API_URL + "/users";
 
