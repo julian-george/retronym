@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import Title from "../components/Title";
 import { IPreferences, useUser } from "../context/userContext";
 import OAuth from "../components/OAuth";
+import { useNavigate } from "react-router-dom";
 
 const KeywordsForm: React.FC<{
   onSubmit: (keywords: string[]) => Promise<boolean>;
@@ -37,7 +38,11 @@ const KeywordsForm: React.FC<{
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-1/3 ">
       <textarea value={rawKeywords} onChange={onRawKeywordsChange}></textarea>
-      <button className="text-right" type="submit" disabled={isLoading}>
+      <button
+        className="text-right]bg-gray-100 py-1 px-2"
+        type="submit"
+        disabled={isLoading}
+      >
         {isLoading ? "Submitting..." : "Submit"}
       </button>
     </form>
@@ -88,6 +93,7 @@ const ControlsForm: React.FC<{
           onChange={handleMaxScrollingTimeChange}
           required
           type="number"
+          className="bg-gray-100 py-1 px-2"
         />
       </div>
 
@@ -100,6 +106,7 @@ const ControlsForm: React.FC<{
 
 function PreferencesPage() {
   const { updatePreferences } = useUser();
+  const navigate = useNavigate();
   const onKeywordsSubmit = useCallback(async (keywords: string[]) => {
     return updatePreferences({ searchTerms: keywords }).then(
       (result) => result
@@ -114,7 +121,9 @@ function PreferencesPage() {
   return (
     <PageWrapper>
       <div className="flex items-center w-full h-fit">
-        <div className="flex-1"></div>
+        <div className="flex-1" onClick={() => navigate("/")}>
+          Back
+        </div>
         <div className="flex-1">
           <Title />
         </div>

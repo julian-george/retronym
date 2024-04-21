@@ -6,7 +6,6 @@ interface RetroTableProps {
 
 const styles = {
   table: {
-    width: "100%",
     backgroundColor: "#f0f0f0",
     border: "3px solid #000000",
     fontFamily: '"Times New Roman", serif',
@@ -21,7 +20,7 @@ const styles = {
 
 const RetroTable: React.FC<RetroTableProps> = ({ posts }) => {
   return (
-    <table style={styles.table}>
+    <table className="w-full">
       <tbody>
         {posts.map((post, index) => (
           <tr key={index}>
@@ -43,11 +42,6 @@ const Feed: React.FC = () => {
 
   return (
     <div>
-      <h1
-        style={{ fontFamily: '"Times New Roman", serif', textAlign: "center" }}
-      >
-        Retro Posts Table
-      </h1>
       <RetroTable posts={posts} />
     </div>
   );
