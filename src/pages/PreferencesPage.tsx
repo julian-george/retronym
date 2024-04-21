@@ -35,10 +35,7 @@ const KeywordsForm: React.FC<{
   );
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-1/3 ">
-      <textarea value={rawKeywords} onChange={onRawKeywordsChange}>
-        At w3schools.com you will learn how to make a website. They offer free
-        tutorials in all web development technologies.
-      </textarea>
+      <textarea value={rawKeywords} onChange={onRawKeywordsChange}></textarea>
       <button className="text-right" type="submit" disabled={isLoading}>
         {isLoading ? "Submitting..." : "Submit"}
       </button>
