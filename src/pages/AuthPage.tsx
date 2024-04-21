@@ -127,11 +127,13 @@ enum AuthState {
 
 function AuthPage() {
   const [authState, setAuthState] = useState<AuthState>(AuthState.LoggingIn);
+
   const toggleAuthState = useCallback(() => {
     setAuthState((prev) =>
       prev == AuthState.LoggingIn ? AuthState.Registering : AuthState.LoggingIn
     );
   }, [setAuthState]);
+
   return (
     <div className="flex justify-center items-center h-screen">
       {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}

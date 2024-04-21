@@ -7,6 +7,7 @@ import AuthPage from "./pages/AuthPage";
 function Navigation() {
   const { user } = useUser();
   console.log(user);
+
   const router = createBrowserRouter([
     {
       path: "/",

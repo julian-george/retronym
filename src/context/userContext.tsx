@@ -3,8 +3,6 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  Dispatch,
-  SetStateAction,
   useCallback,
 } from "react";
 import axios from "axios";
@@ -15,6 +13,7 @@ const API_URL = BASE_API_URL + "/users";
 
 interface User {
   username: string;
+  id: string;
 }
 
 interface UserContextType {
