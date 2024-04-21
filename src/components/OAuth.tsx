@@ -2,34 +2,43 @@ import React, { useCallback, useEffect, useState } from "react";
 import { camelCase, isNull, isUndefined } from "lodash";
 import { Sites } from "../types";
 import { useUser } from "../context/userContext";
-import { getTokens } from "../requests";
+import { getAccessCodes } from "../requests";
 
-const REDIRECT_URI = process.env.URL + "/"; // TODO link to OAuthRedirectPage
+const REDIRECT_URI = process.env.URL + "/oauth"; // link to OAuthRedirectPage
 
 // separate function to ensure it's the same for all sites
 const getState = (site: string, userId: string, redirect: string) => {
   const secret = process.env[`${site.toUpperCase()}_SECRET`];
-  return redirect + "-" + site + "-" + userId + "-" + secret;
+  return JSON.stringify({ redirect, site, userId, secret });
 };
 
 const getURL = (site: Sites, userId: string, redirect: string) => {
   switch (site) {
     case Sites.twitter:
       return (
-        "https://twitter.com/i/oauth2/authorize?response_type=code&scope=tweet.read%20users.read%20follows.read%20follows.write&code_challenge=challenge&code_challenge_method=plain" +
+        "https://twitter.com/i/oauth2/authorize?response_type=code&code_challenge=challenge&code_challenge_method=plain" +
         ("&client_id=" + process.env.TWITTER_CLIENT_ID) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI)
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" +
+          encodeURI("tweet.read users.read follows.read follows.write")) // TODO customize scopes
       );
     case Sites.reddit:
       return (
-        "https://www.reddit.com/api/v1/authorize?response_type=code&duration=permanent&scope=SCOPE_STRING" +
+        "https://www.reddit.com/api/v1/authorize?response_type=code&duration=permanent" +
         ("&client_id=" + process.env.REDDIT_CLIENT_ID) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI)
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" + encodeURI("scopes here"))
       );
-    case Sites.youtube: // TODO add
-      return "";
+    case Sites.youtube:
+      return (
+        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code" +
+        ("&client_id=" + process.env.YOUTUBE_CLIENT_ID) +
+        ("&state=" + getState(redirect, site, userId)) +
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" + encodeURI("scopes here"))
+      );
   }
 };
 
@@ -71,19 +80,24 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
 };
 
 const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
-  const [tokens, setTokens] = useState<Record<string, boolean>>({});
+  const [codes, setCodes] = useState<Record<string, boolean>>({});
 
-  // get token information
+  // get code information
   useEffect(() => {
-    getTokens().then((data) => {
-      setTokens(data);
+    getAccessCodes().then((data) => {
+      setCodes(data);
     });
   }, []);
 
   return (
     <div className="flex justify-center items-center h-screen">
       {Object.keys(Sites).map((site) => (
-        <OAuthBox site={site} parent={parent} disabled={tokens[site]} />
+        <OAuthBox
+          key={site}
+          site={site}
+          parent={parent}
+          disabled={!codes[site]}
+        />
       ))}
 
       {/* coming soon :) */}
