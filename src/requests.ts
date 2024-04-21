@@ -23,9 +23,9 @@ export async function setAccessCode(data: { [key: string]: string }) {
   return axios
     .post<
       { code: string; state: string; error?: string },
-      { success: boolean; message?: string; redirect?: string }
+      { data: { success: boolean; message?: string; redirect?: string } }
     >(API_URL + "/setcode", data)
-    .then(({ success, message }) => {
+    .then(({ data: { success, message } }) => {
       if (!success) console.error(message);
       return { success, message };
     })
