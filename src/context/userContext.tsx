@@ -14,6 +14,7 @@ const API_URL = BASE_API_URL + "/users";
 
 interface User {
   username: string;
+  id: string;
 }
 
 interface UserContextType {

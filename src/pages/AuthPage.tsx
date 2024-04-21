@@ -130,11 +130,13 @@ enum AuthState {
 
 function AuthPage() {
   const [authState, setAuthState] = useState<AuthState>(AuthState.LoggingIn);
+
   const toggleAuthState = useCallback(() => {
     setAuthState((prev) =>
       prev == AuthState.LoggingIn ? AuthState.Registering : AuthState.LoggingIn
     );
   }, [setAuthState]);
+
   return (
     <PageWrapper>
       <div className="h-f flex flex-col items-center ">
