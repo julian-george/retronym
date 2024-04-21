@@ -37,7 +37,7 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
           encodeURIComponent(process.env.REACT_APP_REDDIT_CLIENT_ID ?? "")) +
         ("&state=" + getState(redirect, site, userId)) +
         ("&redirect_uri=" + encodeURIComponent(REDIRECT_URI)) +
-        ("&scope=" + encodeURIComponent("scopes here"))
+        ("&scope=" + encodeURIComponent("mysubreddits read"))
       );
     case Sites.youtube:
       return (
