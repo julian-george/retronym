@@ -46,7 +46,10 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
           encodeURIComponent(process.env.REACT_APP_YOUTUBE_CLIENT_ID ?? "")) +
         ("&state=" + getState(redirect, site, userId)) +
         ("&redirect_uri=" + encodeURIComponent(REDIRECT_URI)) +
-        ("&scope=" + encodeURIComponent("scopes here"))
+        ("&scope=" +
+          encodeURIComponent(
+            "https://www.googleapis.com/auth/youtube.readonly"
+          ))
       );
   }
 };
