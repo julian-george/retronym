@@ -1,4 +1,11 @@
-import React, { useState, Dispatch, SetStateAction, useCallback } from "react";
+import React, {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import Title from "../components/Title";
 import Feed from "../components/Feed";
@@ -40,6 +47,15 @@ function FeedPage() {
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
+  const navigate = useNavigate();
+
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+    }
+  }, []);
 
   return (
     <PageWrapper>
