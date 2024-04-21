@@ -23,7 +23,7 @@ export function setAccessCode(data: { [key: string]: string }) {
     .post<
       { code: string; state: string; error?: string },
       { success: boolean; message?: string; redirect?: string }
-    >(API_URL, data)
+    >(API_URL + "/setcode", data)
     .then(({ success, message }) => {
       if (!success) console.error(message);
       return { success, message };
