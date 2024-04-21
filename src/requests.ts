@@ -5,7 +5,7 @@ import BASE_API_URL from "./url";
 
 const API_URL = BASE_API_URL + "/users";
 
-export function getAccessCodes() {
+export async function getAccessCodes() {
   return axios
     .get<{}, { success: boolean; data: any }>(API_URL + "/oauthcodes")
     .then(({ data: { success, data } }) => {
@@ -19,7 +19,7 @@ export function getAccessCodes() {
     });
 }
 
-export function setAccessCode(data: { [key: string]: string }) {
+export async function setAccessCode(data: { [key: string]: string }) {
   return axios
     .post<
       { code: string; state: string; error?: string },
