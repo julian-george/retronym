@@ -16,7 +16,7 @@ const Sidebar: React.FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
-  const { logout } = useUser();
+  const { logout, user } = useUser();
   const navigate = useNavigate();
   const onLogout = useCallback(() => {
     logout();
@@ -25,12 +25,16 @@ const Sidebar: React.FC<{
   return (
     <>
       <div
-        className={`bg-gray-200 w-64 absolute inset-y-0 left-0 flex flex-col transform ${
+        className={`bg-white w-64 px-2 absolute inset-y-0 left-0 flex flex-col transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition duration-200 ease-in-out`}
       >
-        <div className="flex-1">
-          <button onClick={() => navigate("preferences")}>Preferences</button>
+        <div className="flex-1 font-default">
+          {user && <div className="text-center">Hey, {user.username}</div>}
+          <div className="bg-dog h-[136px] w-[136px]" />
+          <button onClick={() => navigate("preferences")}>
+            <a>Preferences</a>
+          </button>
         </div>
         <button onClick={onLogout}>Log Out</button>
       </div>
@@ -74,9 +78,9 @@ function FeedPage() {
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       <div className="flex items-center w-full h-fit">
         <div className="flex-1">
-          <div className="text-left" onClick={toggleSidebar}>
-            Sidebar
-          </div>
+          <button className="text-left" onClick={toggleSidebar}>
+            Options
+          </button>
         </div>
         <div className="flex-1">
           <Title />
