@@ -1,4 +1,5 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import PageWrapper from "../components/PageWrapper";
 import Title from "../components/Title";
@@ -8,6 +9,7 @@ const LoginForm: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -21,7 +23,10 @@ const LoginForm: React.FC = () => {
     event.preventDefault();
     setIsLoading(true);
     const result = await login(username, password);
-    setIsLoading(false);
+    if (result) {
+      setIsLoading(false);
+      navigate("/");
+    }
   };
 
   return (
@@ -57,6 +62,8 @@ const SignupForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { register } = useUser();
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -79,6 +86,11 @@ const SignupForm: React.FC = () => {
       return;
     }
     setIsLoading(true);
+    const result = await register(username, password);
+    if (result) {
+      setIsLoading(false);
+      navigate("/onboarding");
+    }
   };
 
   return (
@@ -139,9 +151,9 @@ function AuthPage() {
 
   return (
     <PageWrapper>
-      <div className="h-f flex flex-col items-center ">
+      <div className="h-full flex flex-col justify-center items-center ">
         <Title />
-        <div className="bg-gray-100 font-serif px-8 py-4 flex flex-col">
+        <div className="bg-gray-200 font-serif px-8 py-4 flex flex-col">
           {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
           <div className="text-sm text-right">
             <button onClick={toggleAuthState}>
