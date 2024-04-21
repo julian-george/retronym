@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import BASE_API_URL from "../../url";
 
 interface RetroTableProps {
   posts: string[];
 }
+
+const API_URL = BASE_API_URL + "/posts";
 
 const styles = {
   table: {
@@ -33,13 +37,14 @@ const RetroTable: React.FC<RetroTableProps> = ({ posts }) => {
 };
 
 const Feed: React.FC = () => {
-  const posts = [
-    "Post 1: This is a retro style post!",
-    "Post 2: Here's another cool retro post!",
-    "Post 3: Retro posts are back in style!",
-    "Post 4: Don't miss out on this retro post!",
-  ];
-
+  const [posts, setPosts] = useState<any[]>([]);
+  const getPosts = useCallback(async () => {
+    const result = await axios.get(API_URL + "/");
+    console.log(result);
+  }, []);
+  useEffect(() => {
+    getPosts();
+  }, []);
   return (
     <div>
       <RetroTable posts={posts} />
