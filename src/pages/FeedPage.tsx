@@ -57,7 +57,7 @@ function FeedPage() {
     }
   }, []);
 
-  return (
+  return user ? (
     <PageWrapper>
       <Modal
         isOpen={attentionModalOpen}
@@ -82,7 +82,7 @@ function FeedPage() {
         <Feed />
       </div>
     </PageWrapper>
-  );
+  ) : null;
 }
 
 export default FeedPage;

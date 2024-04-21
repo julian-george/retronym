@@ -10,7 +10,7 @@ import axios from "axios";
 
 import BASE_API_URL from "../url";
 
-const API_URL = BASE_API_URL + "/users";
+const API_URL = BASE_API_URL + "/auth";
 
 interface User {
   username: string;
@@ -118,6 +118,10 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         )
         .then(({ data: { success, data } }) => {
           if (success) {
+            // using stored token, not up to date token
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${storedToken}`;
             setUser(data);
             return true;
           }
