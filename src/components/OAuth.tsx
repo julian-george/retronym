@@ -58,6 +58,14 @@ interface OAuthBoxProps {
   implemented?: boolean;
 }
 
+const bgColorClasses: { [siteName: string]: string } = {
+  twitter: "bg-twitter",
+  youtube: "bg-youtube",
+  instagram: "bg-instagram",
+  tiktok: "bg-tiktok",
+  reddit: "bg-reddit",
+};
+
 const OAuthBox: React.FC<OAuthBoxProps> = ({
   site,
   parent,
@@ -75,10 +83,7 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
   }, [user, site]);
 
   return (
-    <div
-      className={disabled ? "bg-gray" : `bg-${site.toLowerCase()}-color`}
-      onClick={redirectUser}
-    >
+    <div className={bgColorClasses[site]} onClick={redirectUser}>
       {implemented
         ? disabled
           ? `${camelCase(site)} connected`

@@ -10,11 +10,17 @@ import axios from "axios";
 
 import BASE_API_URL from "../url";
 
-const API_URL = BASE_API_URL + "/auth";
+const AUTH_URL = BASE_API_URL + "/auth";
+const USER_URL = BASE_API_URL + "/users";
 
+export interface IPreferences {
+  maxScrollingTime: number;
+  searchTerms: string[];
+}
 interface User {
   username: string;
   id: string;
+  preferences: IPreferences;
 }
 
 interface UserContextType {
@@ -25,6 +31,7 @@ interface UserContextType {
   register: (username: string, password: string) => Promise<boolean>;
   loginFromToken: (token: string) => Promise<boolean>;
   logout: () => boolean;
+  updatePreferences: (preferences: Partial<IPreferences>) => Promise<boolean>;
 }
 
 // Create the context with a default value
@@ -72,7 +79,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         .post<
           { username: string; password: string },
           { success: boolean; token?: string; data: any }
-        >(API_URL + "/login", {
+        >(AUTH_URL + "/login", {
           username,
           password,
         })
@@ -96,7 +103,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.log("loginfrom");
       return axios
         .post<{ token: string }, { success: boolean; data: any }>(
-          API_URL + "/login-token",
+          AUTH_URL + "/login-token",
           {
             token: storedToken,
           }
@@ -125,8 +132,8 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       return axios
         .post<
           { username: string; password: string },
-          { success: boolean; token?: string; data: any }
-        >(API_URL + "/register", {
+          { data: { success: boolean; token?: string; data: User } }
+        >(AUTH_URL + "/register", {
           username,
           password,
         })
@@ -153,6 +160,28 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return true;
   }, [setUser, setToken]);
 
+  const updatePreferences = useCallback(
+    async (newPreferences: Partial<IPreferences>) => {
+      return axios
+        .patch<
+          Partial<IPreferences>,
+          { data: { success: boolean; data: User } }
+        >(USER_URL + "/preferences", newPreferences)
+        .then(({ data: { success, data } }) => {
+          if (success) {
+            setUser(data);
+            return true;
+          }
+          return false;
+        })
+        .catch((err) => {
+          console.error(err);
+          return false;
+        });
+    },
+    [setUser]
+  );
+
   return (
     <UserContext.Provider
       value={{
@@ -163,6 +192,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         register,
         loginFromToken,
         logout,
+        updatePreferences,
       }}
     >
       {children}

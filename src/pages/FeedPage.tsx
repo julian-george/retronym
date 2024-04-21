@@ -5,18 +5,23 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 import Title from "../components/Title";
 import Feed from "../components/Feed";
 import PageWrapper from "../components/PageWrapper";
 import Modal from "../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar: React.FC<{
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({ isOpen, setIsOpen }) => {
   const { logout } = useUser();
+  const navigate = useNavigate();
+  const onLogout = useCallback(() => {
+    logout();
+    navigate("auth");
+  }, []);
   return (
     <>
       <div
@@ -24,8 +29,10 @@ const Sidebar: React.FC<{
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition duration-200 ease-in-out`}
       >
-        <div className="flex-1"></div>
-        <button onClick={() => logout()}>Log Out</button>
+        <div className="flex-1">
+          <button onClick={() => navigate("preferences")}>Preferences</button>
+        </div>
+        <button onClick={onLogout}>Log Out</button>
       </div>
 
       {/* Overlay to close sidebar on mobile */}
@@ -44,11 +51,10 @@ const MAX_SCROLL_TIME = 30;
 function FeedPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [attentionModalOpen, setAttentionModalOpen] = useState(false);
+  const navigate = useNavigate();
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
-  const navigate = useNavigate();
-
   const { user } = useUser();
 
   useEffect(() => {
