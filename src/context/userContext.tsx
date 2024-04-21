@@ -95,6 +95,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         })
         .then(({ data: { success, token, data } }) => {
           if (success && token) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             setUser(data);
             setToken(token);
             return true;
@@ -147,6 +148,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         })
         .then(({ data: { success, token, data } }) => {
           if (success && token) {
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             setUser(data);
             setToken(token);
             return true;
