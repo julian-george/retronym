@@ -4,11 +4,9 @@ import Navigation from "./Navigation";
 
 function App() {
   return (
-    <div className="App">
-      <UserProvider>
-        <Navigation />
-      </UserProvider>
-    </div>
+    <UserProvider>
+      <Navigation />
+    </UserProvider>
   );
 }
 

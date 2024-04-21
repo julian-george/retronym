@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useUser } from "../context/userContext";
+import PageWrapper from "../components/PageWrapper";
+import Title from "../components/Title";
 
 const LoginForm: React.FC = () => {
   const { login } = useUser();
@@ -23,8 +25,8 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 ">
+      <div className="flex flex-col">
         <label htmlFor="username">Username:</label>
         <input
           id="username"
@@ -33,7 +35,7 @@ const LoginForm: React.FC = () => {
           required
         />
       </div>
-      <div>
+      <div className="flex flex-col">
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -43,7 +45,7 @@ const LoginForm: React.FC = () => {
           required
         />
       </div>
-      <button type="submit" disabled={isLoading}>
+      <button className="text-right" type="submit" disabled={isLoading}>
         {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
@@ -80,8 +82,8 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 ">
+      <div className="flex flex-col">
         <label htmlFor="username">Username</label>
         <input
           id="username"
@@ -90,7 +92,7 @@ const SignupForm: React.FC = () => {
           required
         />
       </div>
-      <div>
+      <div className="flex flex-col">
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -100,7 +102,7 @@ const SignupForm: React.FC = () => {
           required
         />
       </div>
-      <div>
+      <div className="flex flex-col">
         <label htmlFor="confirmPassword">Confirm Password:</label>
         <input
           type="password"
@@ -111,6 +113,7 @@ const SignupForm: React.FC = () => {
         />
       </div>
       <button
+        className="text-right"
         type="submit"
         disabled={isLoading || confirmPassword !== password}
       >
@@ -135,12 +138,21 @@ function AuthPage() {
   }, [setAuthState]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
-      <div onClick={toggleAuthState}>
-        {authState == AuthState.LoggingIn ? "Create an account" : "Log in"}
+    <PageWrapper>
+      <div className="h-f flex flex-col items-center ">
+        <Title />
+        <div className="bg-gray-100 font-serif px-8 py-4 flex flex-col">
+          {authState == AuthState.LoggingIn ? <LoginForm /> : <SignupForm />}
+          <div className="text-sm text-right">
+            <button onClick={toggleAuthState}>
+              {authState == AuthState.LoggingIn
+                ? "Create an account"
+                : "Log in"}
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 
