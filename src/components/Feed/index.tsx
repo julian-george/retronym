@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import BASE_API_URL from "../../url";
+import { shuffle } from "lodash";
+import RedditPost from "./RedditPost";
 
 interface RetroTableProps {
-  posts: string[];
+  posts: any[];
 }
 
 const API_URL = BASE_API_URL + "/posts";
@@ -28,7 +30,9 @@ const RetroTable: React.FC<RetroTableProps> = ({ posts }) => {
       <tbody>
         {posts.map((post, index) => (
           <tr key={index}>
-            <td style={styles.cell}>{post}</td>
+            <td style={styles.cell}>
+              <RedditPost title={post.data.title} text={post.data.text} />
+            </td>
           </tr>
         ))}
       </tbody>
@@ -40,14 +44,14 @@ const Feed: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const getPosts = useCallback(async () => {
     const result = (await axios.get(API_URL + "/")) as any;
-    setPosts(result.posts.redditPosts);
+    setPosts(result.posts.redditPosts.data.children);
   }, []);
   useEffect(() => {
     getPosts();
   }, []);
   return (
     <div>
-      <RetroTable posts={posts} />
+      <RetroTable posts={shuffle(posts)} />
     </div>
   );
 };
