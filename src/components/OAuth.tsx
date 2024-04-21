@@ -16,20 +16,29 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
   switch (site) {
     case Sites.twitter:
       return (
-        "https://twitter.com/i/oauth2/authorize?response_type=code&scope=tweet.read%20users.read%20follows.read%20follows.write&code_challenge=challenge&code_challenge_method=plain" +
+        "https://twitter.com/i/oauth2/authorize?response_type=code&code_challenge=challenge&code_challenge_method=plain" +
         ("&client_id=" + process.env.TWITTER_CLIENT_ID) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI)
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" +
+          encodeURI("tweet.read users.read follows.read follows.write")) // TODO customize scopes
       );
     case Sites.reddit:
       return (
-        "https://www.reddit.com/api/v1/authorize?response_type=code&duration=permanent&scope=SCOPE_STRING" +
+        "https://www.reddit.com/api/v1/authorize?response_type=code&duration=permanent" +
         ("&client_id=" + process.env.REDDIT_CLIENT_ID) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI)
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" + encodeURI("scopes here"))
       );
-    case Sites.youtube: // TODO add
-      return "";
+    case Sites.youtube:
+      return (
+        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code" +
+        ("&client_id=" + process.env.YOUTUBE_CLIENT_ID) +
+        ("&state=" + getState(redirect, site, userId)) +
+        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&scope=" + encodeURI("scopes here"))
+      );
   }
 };
 
