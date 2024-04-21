@@ -49,7 +49,7 @@ function FeedPage() {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
 
-  return (
+  return user ? (
     <PageWrapper>
       <Modal
         isOpen={attentionModalOpen}
@@ -74,7 +74,7 @@ function FeedPage() {
         <Feed />
       </div>
     </PageWrapper>
-  );
+  ) : null;
 }
 
 export default FeedPage;
