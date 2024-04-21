@@ -2,13 +2,12 @@
 
 import axios from "axios";
 import BASE_API_URL from "./url";
-import { Redirect } from "./types";
 
 const API_URL = BASE_API_URL + "/users";
 
-export function getTokens() {
+export function getAccessCodes() {
   return axios
-    .get<{}, { success: boolean; data: any }>(API_URL + "/oauthtokens")
+    .get<{}, { success: boolean; data: any }>(API_URL + "/oauthcodes")
     .then(({ data: { success, data } }) => {
       if (success) {
         return data;
@@ -20,26 +19,18 @@ export function getTokens() {
     });
 }
 
-export function setToken(data: { [key: string]: string }) {
-  axios
+export function setAccessCode(data: { [key: string]: string }) {
+  return axios
     .post<
       { code: string; state: string; error?: string },
       { success: boolean; message?: string; redirect?: string }
-    >(API_URL, data)
-    .then(({ success, redirect, message }) => {
-      if (!success) throw Error(message);
-
-      switch (redirect) {
-        case Redirect.onboarding:
-          // TODO redirect..
-          break;
-        case Redirect.settings:
-          // TODO
-          break;
-      }
+    >(API_URL + "/setcode", data)
+    .then(({ success, message }) => {
+      if (!success) console.error(message);
+      return { success, message };
     })
     .catch((error) => {
       console.error(error);
-      // TODO show error popup here
+      return { success: false, message: "Failed to connect." };
     });
 }
