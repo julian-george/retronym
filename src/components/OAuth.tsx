@@ -21,7 +21,7 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
         ("&state=" + getState(redirect, site, userId)) +
         ("&redirect_uri=" + REDIRECT_URI) +
         ("&scope=" +
-          encodeURI("tweet.read users.read follows.read follows.write")) // TODO customize scopes
+          encodeURI("offline.access tweet.read users.read follows.read")) // TODO customize scopes
       );
     case Sites.reddit:
       return (
@@ -33,7 +33,7 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
       );
     case Sites.youtube:
       return (
-        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code" +
+        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&access_type=offline" +
         ("&client_id=" + process.env.YOUTUBE_CLIENT_ID) +
         ("&state=" + getState(redirect, site, userId)) +
         ("&redirect_uri=" + REDIRECT_URI) +
