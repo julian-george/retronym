@@ -17,8 +17,12 @@ function OAuthRedirectPage() {
   useEffect(() => {
     const data: { [key: string]: string } = {};
     Array.from(searchParams.entries()).forEach((entry) => {
-      data[entry[0]] = entry[1];
+      data[entry[0]] = decodeURI(entry[1])
+        .replaceAll("*", '"')
+        .replaceAll("@", ",");
     });
+
+    console.log(data);
 
     // reconstruct state
     const stateObject = JSON.parse(data.state);
