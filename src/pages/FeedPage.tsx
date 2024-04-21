@@ -25,7 +25,7 @@ const Sidebar: React.FC<{
   return (
     <>
       <div
-        className={`bg-white w-64 px-2 absolute inset-y-0 left-0 flex flex-col transform ${
+        className={`bg-orange w-64 px-2 absolute inset-y-0 left-0 flex flex-col transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition duration-200 ease-in-out`}
       >

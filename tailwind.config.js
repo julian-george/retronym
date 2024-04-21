@@ -9,6 +9,8 @@ module.exports = {
         youtube: "#FF0000",
         instagram: "#C13584",
         tiktok: "#00f2ea",
+
+        orange: "#ED8A1B",
       },
       backgroundImage: {
         clip: "url('/public/90sclip.jpg')",
