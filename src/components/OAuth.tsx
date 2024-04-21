@@ -95,7 +95,7 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center w-1/2">
       {Object.keys(Sites).map((site) => (
         <OAuthBox
           key={site}

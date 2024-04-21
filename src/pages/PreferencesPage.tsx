@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import Title from "../components/Title";
 import { IPreferences, useUser } from "../context/userContext";
+import OAuth from "../components/OAuth";
 
 const KeywordsForm: React.FC<{
   onSubmit: (keywords: string[]) => Promise<boolean>;
@@ -123,6 +124,7 @@ function PreferencesPage() {
         <div>
           <h2 className="text-xl">Integrations</h2>
           <p>Add or remove app integrations</p>
+          <OAuth parent="PREFERENCES" />
         </div>
         <div>
           <h2 className="text-xl">Keywords</h2>
