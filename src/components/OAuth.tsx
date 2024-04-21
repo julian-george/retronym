@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { camelCase, isNull, isUndefined } from "lodash";
 import { Sites } from "../types";
 import { useUser } from "../context/userContext";
-import { getTokens } from "../requests";
+import { getAccessCodes } from "../requests";
 
 const REDIRECT_URI = process.env.URL + "/oauth"; // link to OAuthRedirectPage
 
@@ -80,12 +80,12 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
 };
 
 const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
-  const [tokens, setTokens] = useState<Record<string, boolean>>({});
+  const [codes, setCodes] = useState<Record<string, boolean>>({});
 
-  // get token information
+  // get code information
   useEffect(() => {
-    getTokens().then((data) => {
-      setTokens(data);
+    getAccessCodes().then((data) => {
+      setCodes(data);
     });
   }, []);
 
@@ -96,7 +96,7 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
           key={site}
           site={site}
           parent={parent}
-          disabled={!tokens[site]}
+          disabled={!codes[site]}
         />
       ))}
 

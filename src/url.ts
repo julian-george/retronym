@@ -1,3 +1,3 @@
-const BASE_API_URL = "http://localhost:5000";
+const BASE_API_URL = "https://retronym-backend.onrender.com";
 
 export default BASE_API_URL;

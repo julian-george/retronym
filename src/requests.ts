@@ -4,9 +4,9 @@ import { Redirect } from "./types";
 
 const API_URL = BASE_API_URL + "/users";
 
-export function getTokens() {
+export function getAccessCodes() {
   return axios
-    .get<{}, { success: boolean; data: any }>(API_URL + "/oauthtokens")
+    .get<{}, { success: boolean; data: any }>(API_URL + "/oauthcodes")
     .then(({ data: { success, data } }) => {
       if (success) {
         return data;
@@ -18,7 +18,7 @@ export function getTokens() {
     });
 }
 
-export function setToken(data: { [key: string]: string }) {
+export function setAccessCode(data: { [key: string]: string }) {
   return axios
     .post<
       { code: string; state: string; error?: string },

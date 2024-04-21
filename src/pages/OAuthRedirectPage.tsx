@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { setToken } from "../requests";
+import { setAccessCode } from "../requests";
 import { isNull } from "lodash";
 import Modal from "../components/Modal";
 
@@ -15,7 +15,7 @@ function OAuthRedirectPage() {
   const [errorRedirect, setErrorRedirect] = useState<string | null>(null);
 
   useEffect(() => {
-    const data: { [key: string]: string } = { code: "", state: "", error: "" };
+    const data: { [key: string]: string } = {};
     Array.from(searchParams.entries()).forEach((entry) => {
       data[entry[0]] = entry[1];
     });
@@ -23,8 +23,8 @@ function OAuthRedirectPage() {
     // reconstruct state
     const stateObject = JSON.parse(data.state);
 
-    setToken({ ...data, ...stateObject }).then(({ success, message }) => {
-      // if settoken fails, set error (which will be shown in a modal)
+    setAccessCode({ ...data, ...stateObject }).then(({ success, message }) => {
+      // if setaccesscode fails, set error (which will be shown in a modal)
       if (!success) {
         setErrorRedirect(stateObject.redirect);
         return;
