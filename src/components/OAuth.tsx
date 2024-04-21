@@ -94,13 +94,14 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
 };
 
 const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
-  const [codes, setCodes] = useState<Record<string, boolean>>({});
+  const [codes, setCodes] = useState<Record<string, boolean> | null>(null);
 
   // get code information
   useEffect(() => {
-    getAccessCodes().then((data) => {
-      setCodes(data);
-    });
+    if (!codes)
+      getAccessCodes().then((data) => {
+        setCodes(data);
+      });
   }, []);
 
   return (
@@ -110,7 +111,7 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
           key={site}
           site={site}
           parent={parent}
-          disabled={codes[site.toLowerCase()]}
+          disabled={codes?.[site.toLowerCase()]}
         />
       ))}
 
