@@ -1,23 +1,48 @@
-import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { setToken } from "../requests";
+import { isNull } from "lodash";
+import Modal from "../components/Modal";
 
 /**
  * oauth pages redirect here, with stuff in the params.
  * forward the params to the backend
  */
 function OAuthRedirectPage() {
+  const navigate = useNavigate();
   const [searchParams, _setSearchParams] = useSearchParams();
+
+  const [errorRedirect, setErrorRedirect] = useState<string | null>(null);
 
   useEffect(() => {
     const data: { [key: string]: string } = { code: "", state: "", error: "" };
     Array.from(searchParams.entries()).forEach((entry) => {
       data[entry[0]] = entry[1];
     });
-    setToken(data);
-  }, [searchParams]);
 
-  return null;
+    // reconstruct state
+    const stateObject = JSON.parse(data.state);
+
+    setToken({ ...data, ...stateObject }).then(({ success, message }) => {
+      // if settoken fails, set error (which will be shown in a modal)
+      if (!success) {
+        setErrorRedirect(stateObject.redirect);
+        return;
+      }
+
+      // otherwise just go back
+      navigate(`/${stateObject.redirect.toLowerCase()}`);
+    });
+  }, [searchParams, navigate]);
+
+  return (
+    <Modal
+      isOpen={!isNull(errorRedirect)}
+      closeModal={() => navigate(`/${errorRedirect?.toLowerCase()}`)}
+    >
+      Could not connect. Please try again
+    </Modal>
+  );
 }
 
 export default OAuthRedirectPage;

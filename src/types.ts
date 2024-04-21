@@ -6,5 +6,5 @@ export enum Sites {
 
 export enum Redirect {
   onboarding = "ONBOARDING",
-  settings = "SETTINGS",
+  preferences = "PREFERENCES",
 }

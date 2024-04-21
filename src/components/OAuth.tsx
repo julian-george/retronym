@@ -4,12 +4,12 @@ import { Sites } from "../types";
 import { useUser } from "../context/userContext";
 import { getTokens } from "../requests";
 
-const REDIRECT_URI = process.env.URL + "/"; // TODO link to OAuthRedirectPage
+const REDIRECT_URI = process.env.URL + "/oauth"; // link to OAuthRedirectPage
 
 // separate function to ensure it's the same for all sites
 const getState = (site: string, userId: string, redirect: string) => {
   const secret = process.env[`${site.toUpperCase()}_SECRET`];
-  return redirect + "-" + site + "-" + userId + "-" + secret;
+  return JSON.stringify({ redirect, site, userId, secret });
 };
 
 const getURL = (site: Sites, userId: string, redirect: string) => {
@@ -83,7 +83,12 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
   return (
     <div className="flex justify-center items-center h-screen">
       {Object.keys(Sites).map((site) => (
-        <OAuthBox site={site} parent={parent} disabled={tokens[site]} />
+        <OAuthBox
+          key={site}
+          site={site}
+          parent={parent}
+          disabled={!tokens[site]}
+        />
       ))}
 
       {/* coming soon :) */}

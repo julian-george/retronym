@@ -19,25 +19,17 @@ export function getTokens() {
 }
 
 export function setToken(data: { [key: string]: string }) {
-  axios
+  return axios
     .post<
       { code: string; state: string; error?: string },
       { success: boolean; message?: string; redirect?: string }
     >(API_URL, data)
-    .then(({ success, redirect, message }) => {
-      if (!success) throw Error(message);
-
-      switch (redirect) {
-        case Redirect.onboarding:
-          // TODO redirect..
-          break;
-        case Redirect.settings:
-          // TODO
-          break;
-      }
+    .then(({ success, message }) => {
+      if (!success) console.error(message);
+      return { success, message };
     })
     .catch((error) => {
       console.error(error);
-      // TODO show error popup here
+      return { success: false, message: "Failed to connect." };
     });
 }
