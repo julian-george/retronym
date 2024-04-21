@@ -10,6 +10,16 @@ module.exports = {
         instagram: "#C13584",
         tiktok: "#00f2ea",
       },
+      backgroundImage: {
+        clip: "url('/public/90sclip.jpg')",
+        dog: "url('/public/happydog.gif')",
+      },
+      backgroundSize: {
+        smalltile: "48px",
+      },
+      fontFamily: {
+        default: ['"Times New Roman"'],
+      },
     },
   },
   plugins: [],

@@ -121,15 +121,17 @@ function PreferencesPage() {
   return (
     <PageWrapper>
       <div className="flex items-center w-full h-fit">
-        <div className="flex-1" onClick={() => navigate("/")}>
-          Back
-        </div>
         <div className="flex-1">
+          <button className="text-left" onClick={() => navigate("/")}>
+            Back
+          </button>
+        </div>
+        <div className="flex-1 text-center">
           <Title />
         </div>
         <div className="flex-1"></div>
       </div>
-      <div className="w-3/5 font-serif">
+      <div className="w-3/5 font-serif  bg-gray-100">
         <div>
           <h2 className="text-xl">Integrations</h2>
           <p>Add or remove app integrations</p>
