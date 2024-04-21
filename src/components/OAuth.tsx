@@ -4,12 +4,16 @@ import { Sites } from "../types";
 import { useUser } from "../context/userContext";
 import { getAccessCodes } from "../requests";
 
-const REDIRECT_URI = process.env.URL + "/oauth"; // link to OAuthRedirectPage
+const REDIRECT_URI = process.env.REACT_APP_URL + "/oauth"; // link to OAuthRedirectPage
 
 // separate function to ensure it's the same for all sites
-const getState = (site: string, userId: string, redirect: string) => {
-  const secret = process.env[`${site.toUpperCase()}_SECRET`];
-  return JSON.stringify({ redirect, site, userId, secret });
+const getState = (redirect: string, site: string, userId: string) => {
+  const secret = process.env[`REACT_APP_${site.toUpperCase()}_SECRET`];
+  return encodeURIComponent(
+    JSON.stringify({ redirect, site, userId, secret })
+      .replaceAll(",", "@")
+      .replaceAll('"', "*")
+  );
 };
 
 const getURL = (site: Sites, userId: string, redirect: string) => {
@@ -17,27 +21,32 @@ const getURL = (site: Sites, userId: string, redirect: string) => {
     case Sites.twitter:
       return (
         "https://twitter.com/i/oauth2/authorize?response_type=code&code_challenge=challenge&code_challenge_method=plain" +
-        ("&client_id=" + process.env.TWITTER_CLIENT_ID) +
+        ("&client_id=" +
+          encodeURIComponent(process.env.REACT_APP_TWITTER_CLIENT_ID ?? "")) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI) +
+        ("&redirect_uri=" + encodeURIComponent(REDIRECT_URI)) +
         ("&scope=" +
-          encodeURI("tweet.read users.read follows.read follows.write")) // TODO customize scopes
+          encodeURIComponent(
+            "offline.access tweet.read users.read follows.read"
+          )) // TODO customize scopes
       );
     case Sites.reddit:
       return (
         "https://www.reddit.com/api/v1/authorize?response_type=code&duration=permanent" +
-        ("&client_id=" + process.env.REDDIT_CLIENT_ID) +
+        ("&client_id=" +
+          encodeURIComponent(process.env.REACT_APP_REDDIT_CLIENT_ID ?? "")) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI) +
-        ("&scope=" + encodeURI("scopes here"))
+        ("&redirect_uri=" + encodeURIComponent(REDIRECT_URI)) +
+        ("&scope=" + encodeURIComponent("scopes here"))
       );
     case Sites.youtube:
       return (
-        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code" +
-        ("&client_id=" + process.env.YOUTUBE_CLIENT_ID) +
+        "https://accounts.google.com/o/oauth2/v2/auth?response_type=code&access_type=offline" +
+        ("&client_id=" +
+          encodeURIComponent(process.env.REACT_APP_YOUTUBE_CLIENT_ID ?? "")) +
         ("&state=" + getState(redirect, site, userId)) +
-        ("&redirect_uri=" + REDIRECT_URI) +
-        ("&scope=" + encodeURI("scopes here"))
+        ("&redirect_uri=" + encodeURIComponent(REDIRECT_URI)) +
+        ("&scope=" + encodeURIComponent("scopes here"))
       );
   }
 };
@@ -70,7 +79,7 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
     if (isNull(user)) return;
     if (isUndefined(parent)) return;
 
-    window.location.href = getURL(site as Sites, user?.id, parent);
+    window.location.href = getURL(site as Sites, user?.id, parent) ?? "";
   }, [user, site]);
 
   return (
@@ -95,13 +104,13 @@ const OAuth: React.FC<{ parent: string }> = ({ parent }) => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-1/2">
-      {Object.keys(Sites).map((site) => (
+    <div className="flex justify-center items-center h-screen">
+      {Object.values(Sites).map((site) => (
         <OAuthBox
           key={site}
           site={site}
           parent={parent}
-          disabled={codes[site]}
+          disabled={codes[site.toLowerCase()]}
         />
       ))}
 

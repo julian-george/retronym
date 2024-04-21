@@ -37,27 +37,15 @@ interface UserContextType {
 // Create the context with a default value
 const UserContext = createContext<UserContextType | null>(null);
 
-const NUM_TOKEN_DAYS = 3;
 const TOKEN_NAME = "retronym_auth_token=";
 
 // https://www.w3schools.com/js/js_cookies.asp
 function getCookie() {
-  let name = TOKEN_NAME + "=";
-  let ca = document.cookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return null;
+  return sessionStorage.getItem(TOKEN_NAME);
 }
 
 function deleteCookie() {
-  document.cookie = `${TOKEN_NAME}=; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+  sessionStorage.removeItem(TOKEN_NAME);
 }
 
 // Provider component that wraps your app and makes user info available everywhere
@@ -82,12 +70,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      const expires = new Date(
-        Date.now() + NUM_TOKEN_DAYS * 864e5
-      ).toUTCString();
-      document.cookie = `${TOKEN_NAME}=${encodeURIComponent(
-        token
-      )}; expires=${expires}; path=/; secure; SameSite=Strict`;
+      sessionStorage.setItem(TOKEN_NAME, token);
     }
   }, [token]);
   const login = useCallback(
@@ -117,6 +100,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   );
   const loginFromToken = useCallback(
     async (storedToken: string) => {
+      console.log("loginfrom");
       return axios
         .post<{ token: string }, { success: boolean; data: any }>(
           AUTH_URL + "/login-token",
