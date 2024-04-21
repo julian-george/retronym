@@ -86,7 +86,10 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
   }, [user, site]);
 
   return (
-    <div className={bgColorClasses[site]} onClick={redirectUser}>
+    <div
+      className={bgColorClasses[site]}
+      onClick={disabled ? () => {} : redirectUser}
+    >
       {implemented
         ? disabled
           ? `${camelCase(site)} connected`
