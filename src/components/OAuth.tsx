@@ -66,8 +66,6 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
 }) => {
   const user = useUser().user;
 
-  console.log(site, getURL(site as Sites, user?.id ?? "", parent ?? ""));
-
   // redirect user to the oauth page
   const redirectUser = useCallback(() => {
     if (isNull(user)) return;
