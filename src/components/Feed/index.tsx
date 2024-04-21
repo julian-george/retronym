@@ -44,7 +44,7 @@ const Feed: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const getPosts = useCallback(async () => {
     const result = (await axios.get(API_URL + "/")) as any;
-    setPosts(result.posts.redditPosts.data.children);
+    setPosts(result.data.posts.redditPosts.data.children);
   }, []);
   useEffect(() => {
     getPosts();
