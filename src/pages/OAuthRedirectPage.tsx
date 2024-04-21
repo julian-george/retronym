@@ -11,7 +11,6 @@ import Modal from "../components/Modal";
 function OAuthRedirectPage() {
   const navigate = useNavigate();
   const [searchParams, _setSearchParams] = useSearchParams();
-
   const [errorRedirect, setErrorRedirect] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,22 +21,20 @@ function OAuthRedirectPage() {
         .replaceAll("@", ",");
     });
 
-    console.log(data);
-
     // reconstruct state
     const stateObject = JSON.parse(data.state);
-
-    setAccessCode({ ...data, ...stateObject }).then(({ success, message }) => {
-      // if setaccesscode fails, set error (which will be shown in a modal)
+    setAccessCode({ ...data, ...stateObject }).then(({ success }) => {
+      // if setaccesscode fails, set e rror (which will be shown in a modal)
       if (!success) {
         setErrorRedirect(stateObject.redirect);
         return;
       }
 
       // otherwise just go back
+      console.log(stateObject);
       navigate(`/${stateObject.redirect.toLowerCase()}`);
     });
-  }, [searchParams, navigate]);
+  }, []);
 
   return (
     <Modal

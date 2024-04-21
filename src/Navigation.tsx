@@ -34,7 +34,7 @@ function Navigation() {
     },
     {
       path: "/oauth",
-      element: !tokenLoading || user ? <OAuthRedirectPage /> : authRedirect,
+      element: !tokenLoading || user ? <OAuthRedirectPage /> : <></>,
     },
   ]);
   return <RouterProvider router={router} />;
