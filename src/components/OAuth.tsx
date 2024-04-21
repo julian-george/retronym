@@ -84,10 +84,9 @@ const OAuthBox: React.FC<OAuthBoxProps> = ({
 
     window.location.href = getURL(site as Sites, user?.id, parent) ?? "";
   }, [user, site]);
-
   return (
     <div
-      className={bgColorClasses[site]}
+      className={bgColorClasses[site.toLocaleLowerCase()]}
       onClick={disabled ? () => {} : redirectUser}
     >
       {implemented
