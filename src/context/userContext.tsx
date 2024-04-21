@@ -30,7 +30,6 @@ interface UserContextType {
 // Create the context with a default value
 const UserContext = createContext<UserContextType | null>(null);
 
-const NUM_TOKEN_DAYS = 3;
 const TOKEN_NAME = "retronym_auth_token=";
 
 // https://www.w3schools.com/js/js_cookies.asp
