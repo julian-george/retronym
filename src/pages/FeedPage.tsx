@@ -1,4 +1,10 @@
-import React, { useState, Dispatch, SetStateAction, useCallback } from "react";
+import React, {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+} from "react";
 import { useUser } from "../context/userContext";
 import Title from "../components/Title";
 import Feed from "../components/Feed";
@@ -45,9 +51,17 @@ const MAX_SCROLL_TIME = 30;
 function FeedPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [attentionModalOpen, setAttentionModalOpen] = useState(false);
+  const navigate = useNavigate();
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((prev) => !prev);
   }, [setSidebarOpen]);
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+    }
+  }, []);
 
   return user ? (
     <PageWrapper>

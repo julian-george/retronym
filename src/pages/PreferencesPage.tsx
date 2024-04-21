@@ -1,12 +1,31 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import Title from "../components/Title";
 
 function KeywordsForm() {
-  const [keywords, setKeywords] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [keywords, setKeywords] = useState<string[]>([""]);
+  const [rawKeywords, setRawKeywords] = useState<string>("");
+  const onRawKeywordsChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const newValue = event.target.value;
+      setRawKeywords(newValue);
+      setKeywords(newValue.split(" "));
+    },
+    []
+  );
   const handleSubmit = useCallback(() => {}, []);
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-1/3 "></form>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-1/3 ">
+      <textarea value={rawKeywords} onChange={onRawKeywordsChange}>
+        At w3schools.com you will learn how to make a website. They offer free
+        tutorials in all web development technologies.
+      </textarea>
+      <button className="text-right" type="submit" disabled={isLoading}>
+        {isLoading ? "Submitting..." : "Submit"}
+      </button>
+    </form>
   );
 }
 
@@ -62,10 +81,10 @@ function PreferencesPage() {
         </div>
         <div>
           <h2 className="text-xl">Keywords</h2>
-          <p>Change the words we use to generate posts</p>
-          <div>
-            <button>Apply</button>
-          </div>
+          <p>
+            Change the words we use to generate posts. Separate them by space
+          </p>
+          <KeywordsForm />
         </div>
         <div>
           <h2 className="text-xl">Scroll Control</h2>

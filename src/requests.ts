@@ -1,3 +1,5 @@
+// for stateless user-related requests
+
 import axios from "axios";
 import BASE_API_URL from "./url";
 import { Redirect } from "./types";
