@@ -39,8 +39,8 @@ const RetroTable: React.FC<RetroTableProps> = ({ posts }) => {
 const Feed: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const getPosts = useCallback(async () => {
-    const result = await axios.get(API_URL + "/");
-    console.log(result);
+    const result = (await axios.get(API_URL + "/")) as any;
+    setPosts(result.posts.redditPosts);
   }, []);
   useEffect(() => {
     getPosts();
